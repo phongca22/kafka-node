@@ -1,0 +1,89 @@
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.css" />
+  <script src="assets/js/app.js"></script>
+</head>
+<body ng-controller="AppCtrl as self" ng-app="MyApp">
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden" layout="column">
+    <md-toolbar layout="row" layout-align="start center" style="min-height: initial;height: 42px;padding: 8px;">
+      <img src="assets/images/logo.png" style="width: 100px;
+        padding: 0px 8px;"/>
+    </md-toolbar>
+    <div layout="row" flex layout-fill style="overflow: auto">
+      <div layout="column">
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Connection</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <md-input-container class="md-block">
+              <label>Host</label>
+              <md-icon md-svg-icon="earth"></md-icon>
+              <input ng-model="host" ng-disabled="isConnected"/>
+            </md-input-container>
+          </md-card-content>
+          <md-divider></md-divider>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button class="md-primary" ng-click="connect()">{{isConnected ? 'disconnect' : 'connect'}}</md-button>
+          </md-card-actions>
+        </md-card>
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Producer</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <md-input-container class="md-block">
+              <label>Topic</label>
+              <md-icon md-svg-icon="layers"></md-icon>
+              <md-select ng-model="producer.topic" ng-disabled="!isConnected">
+                <md-option ng-value="item[0].topic" ng-repeat="item in topics">
+                  {{item[0].topic}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <md-input-container>
+              <label>Message</label>
+              <md-icon md-svg-icon="android-messages"></md-icon>
+              <input ng-model="producer.message" ng-disabled="!isConnected"/>
+            </md-input-container>
+          </md-card-content>
+          <md-divider></md-divider>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button class="md-primary" ng-click="send()" ng-disabled="!isConnected || !producer.message">send</md-button>
+          </md-card-actions>
+        </md-card>
+      </div>
+      <div class="md-whiteframe-1dp" flex style="background: #fff;margin: 8px;"
+        layout="column">
+        <div style="padding: 16px;">
+          <span class="md-headline">Consumer</span>
+          <md-input-container class="md-block">
+            <label>Topic</label>
+            <md-icon md-svg-icon="layers"></md-icon>
+            <md-select ng-model="consumer.topic" ng-disabled="!isConnected" ng-change="topicChanged()">
+              <md-option ng-value="item[0].topic" ng-repeat="item in topics">
+                {{item[0].topic}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div flex style="overflow: auto;background: #f7f7f7; padding: 16px; margin: 16px;" id="mesWrap">
+          <div ng-repeat="m in messages track by $index">
+            {{m}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
